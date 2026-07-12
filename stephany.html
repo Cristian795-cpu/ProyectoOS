@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografía - Periodonto de Inserción</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-M5TcewZFqJUFZ6Tkw1i5e7LgH/3/OqDYlLkgrtIfZ9sG2FJXLV38NZZMyzfoKfhu" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.4/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+        :root {
+            /* Paleta Pastel "Study Notes" */
+            --bg-page: #f4f4f9;
+            --paper: #ffffff;
+            --pink-light: #ffe5ec;
+            --pink-main: #ff8fab;
+            --teal-light: #e0f7fa;
+            --teal-main: #26c6da;
+            --yellow-light: #fff9c4;
+            --yellow-main: #ffca28;
+            --purple-light: #f3e5f5;
+            --purple-main: #ab47bc;
+            --blue-light: #e3f2fd;
+            --blue-main: #42a5f5;
+            --text-dark: #424242;
+            --text-muted: #757575;
+            --highlighter: #ccff90;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            font-family: 'Nunito', sans-serif;
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        .pages-wrapper {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .infographic-container {
+            width: min(100%, 900px);
+            max-width: 900px;
+            margin: 0 auto 40px;
+            min-height: 4500px; /* Alto recomendado */
+            height: auto;
+            background-color: var(--paper);
+            position: relative;
+            overflow: hidden; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            /* Fondo estilo hoja de cuaderno cuadriculada */
+            background-image: 
+                linear-gradient(var(--blue-light) 1px, transparent 1px),
+                linear-gradient(90deg, var(--blue-light) 1px, transparent 1px);
+            background-size: 25px 25px;
+            display: flex;
+            flex-direction: column;
+            padding: 60px 50px;
+        }
+
+        .draggable-item {
+            display: inline-block;
+            cursor: grab;
+            touch-action: none;
+        }
+
+
+        .editor-sidebar .tool-btn {
+            border: 1px solid rgba(0,0,0,0.12);
+            background: white;
+            color: var(--text-dark);
+            padding: 12px 10px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+            text-align: left;
+        }
+
+        .editor-sidebar .tool-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+        }
+
+        .editor-sidebar .tool-btn.active {
+            background: linear-gradient(135deg, #ff8fab, #26c6da);
+            color: white;
+            border-color: transparent;
+        }
+
+        .editor-sidebar label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .editor-sidebar select,
+        .editor-sidebar input[type="color"] {
+            padding: 10px;
+            border: 1px solid rgba(0,0,0,0.12);
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .editor-sidebar .tool-group {
+            display: grid;
+            gap: 8px;
+        }
+
+        .infographic-container[contenteditable="true"] {
+            outline: 3px dashed rgba(38, 198, 218, 0.55);
+        }
+
+        .infographic-container[contenteditable="true"] * {
+            user-select: text;
+        }
+
+        /* Margen de cuaderno (Línea roja a la izquierda) */
+        .infographic-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 60px;
+            width: 2px;
+            background-color: #ffcdd2;
+            z-index: 0;
+        }
+
+        /* Títulos */
+        h1, h2, h3, h4 {
+            margin: 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .title-wrapper {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 10;
+            background: var(--paper);
+            padding: 30px;
+            border-radius: 30px;
+            border: 3px dashed var(--pink-main);
+            box-shadow: 10px 10px 0px var(--pink-light);
+        }
+
+        .main-title {
+            font-size: 55px;
+            color: var(--text-dark);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            line-height: 1.1;
+        }
+
+        .main-title span {
+            color: var(--pink-main);
+        }
+
+        .subtitle {
+            font-family: 'Caveat', cursive;
+            font-size: 35px;
+            color: var(--teal-main);
+            margin-top: 10px;
+        }
+
+        /* Post-its y Tarjetas */
+        .section-block {
+            position: relative;
+            z-index: 10;
+            margin-bottom: 50px;
+            background: var(--paper);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .post-it {
+            background: var(--yellow-light);
+            padding: 25px;
+            border-radius: 5px 25px 25px 25px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.08);
+            position: relative;
+        }
+        
+        .post-it::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            border-width: 0 0 30px 30px;
+            border-style: solid;
+            border-color: transparent transparent rgba(0,0,0,0.05) transparent;
+        }
+
+        /* Elementos Decorativos */
+        .tape {
+            position: absolute;
+            height: 35px;
+            width: 140px;
+            z-index: 20;
+            opacity: 0.8;
+        }
+        .tape-center { top: -15px; left: 50%; transform: translateX(-50%) rotate(-2deg); background-color: var(--pink-light); border-left: 2px dashed var(--pink-main); border-right: 2px dashed var(--pink-main);}
+        .tape-corner-tl { top: -15px; left: -25px; transform: rotate(-45deg); width: 100px; background-color: var(--teal-light); }
+        .tape-corner-tr { top: -15px; right: -25px; transform: rotate(45deg); width: 100px; background-color: var(--yellow-main); opacity: 0.5; }
+
+        .paperclip {
+            position: absolute;
+            top: -25px;
+            left: 30px;
+            width: 45px;
+            z-index: 20;
+            transform: rotate(-15deg);
+        }
+
+        /* Tipografías de Secciones */
+        .section-title {
+            font-size: 38px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            display: inline-block;
+            position: relative;
+        }
+        
+        /* Efecto resaltador */
+        .highlight-text {
+            background: linear-gradient(180deg, transparent 50%, var(--highlighter) 50%);
+            padding: 0 5px;
+        }
+
+        .highlight-pink { background: linear-gradient(180deg, transparent 50%, var(--pink-light) 50%); }
+        .highlight-teal { background: linear-gradient(180deg, transparent 50%, var(--teal-light) 50%); }
+        .highlight-blue { background: linear-gradient(180deg, transparent 50%, var(--blue-light) 50%); }
+
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        /* Grillas */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Listas / Notas */
+        .notes-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .notes-list li {
+            background: var(--paper);
+            margin-bottom: 15px;
+            padding: 15px 20px;
+            border-radius: 15px;
+            border-left: 6px solid var(--text-dark);
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+        
+        .border-pink { border-color: var(--pink-main) !important; }
+        .border-teal { border-color: var(--teal-main) !important; }
+        .border-purple { border-color: var(--purple-main) !important; }
+        .border-blue { border-color: var(--blue-main) !important; }
+        .border-yellow { border-color: var(--yellow-main) !important; }
+
+        /* SECCIÓN FIBRAS Y DIAGRAMA */
+        .diagram-section {
+            background: var(--teal-light);
+            border-radius: 30px;
+            padding: 40px;
+            height: 950px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 4px solid var(--teal-main);
+            position: relative;
+        }
+
+        .diagram-container {
+            position: relative;
+            width: 100%;
+            height: 750px;
+            margin-top: 30px;
+        }
+
+        .tooth-svg {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 420px;
+            height: 650px;
+        }
+
+        .pointer-box {
+            position: absolute;
+            background: var(--paper);
+            border: 3px solid;
+            padding: 15px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 16px;
+            box-shadow: 5px 5px 0px rgba(0,0,0,0.1);
+            width: 220px;
+            z-index: 20;
+        }
+
+        .pointer-box span {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        .pb-1 { top: 30px; left: 0px; border-color: var(--pink-main); color: var(--pink-main); }
+        .pb-2 { top: 220px; left: -20px; border-color: var(--yellow-main); color: #d4a000; }
+        .pb-3 { top: 400px; left: -20px; border-color: var(--teal-main); color: var(--teal-main); }
+        .pb-4 { top: 580px; left: 40px; border-color: var(--purple-main); color: var(--purple-main); }
+        .pb-5 { top: 480px; right: -20px; border-color: #e55039; color: #e55039; }
+
+        /* Integrantes Footer */
+        .footer-section {
+            background: var(--text-dark);
+            border-radius: 25px;
+            padding: 40px;
+            color: var(--paper);
+            text-align: center;
+            margin-top: auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-section h3 {
+            font-family: 'Caveat', cursive;
+            font-size: 40px;
+            margin-bottom: 25px;
+            color: var(--yellow-main);
+        }
+
+        .integrantes-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .integrante-badge {
+            background: rgba(255,255,255,0.1);
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 18px;
+            border: 2px dashed rgba(255,255,255,0.3);
+        }
+
+        /* Clases utilitarias */
+        .font-caveat { font-family: 'Caveat', cursive; font-size: 26px; color: var(--text-muted); }
+        .text-center { text-align: center; }
+
+        .editing-mode .section-block,
+        .editing-mode .pointer-box,
+        .editing-mode .title-wrapper,
+        .editing-mode .footer-section,
+        .editing-mode img,
+        .editing-mode video {
+            cursor: grab;
+        }
+
+        .draggable-item {
+            cursor: grab;
+        }
+
+        .dragging {
+            opacity: 0.85;
+            cursor: grabbing !important;
+            z-index: 9999;
+        }
+
+        .placeholder {
+            border: 2px dashed rgba(38, 198, 218, 0.7);
+            background: rgba(38, 198, 218, 0.08);
+            min-height: 24px;
+        }
+
+        .offcanvas.editor-sidebar {
+            width: min(360px, 90vw);
+            max-width: 360px;
+            background: rgba(255,255,255,0.98);
+            border-radius: 0 20px 20px 0;
+            box-shadow: 0 16px 30px rgba(0,0,0,0.18);
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .offcanvas-header {
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+        }
+
+        .offcanvas-toggler {
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 1100;
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+        }
+
+        .editor-sidebar .tool-btn,
+        .editor-sidebar select,
+        .editor-sidebar input[type="color"] {
+            width: 100%;
+            border-radius: 12px;
+        }
+
+        .editor-sidebar .tool-btn {
+            border: 1px solid rgba(0,0,0,0.12);
+            background: white;
+            color: var(--text-dark);
+            padding: 12px 10px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+            text-align: left;
+        }
+
+        .editor-sidebar .tool-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+        }
+
+        .editor-sidebar .tool-btn.active {
+            background: linear-gradient(135deg, #ff8fab, #26c6da);
+            color: white;
+            border-color: transparent;
+        }
+
+        .editor-sidebar label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .editor-sidebar select,
+        .editor-sidebar input[type="color"] {
+            padding: 10px;
+            border: 1px solid rgba(0,0,0,0.12);
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .editor-sidebar .tool-group {
+            display: grid;
+            gap: 8px;
+        }
+
+        .template-panel {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            max-height: 420px;
+            overflow-y: auto;
+            background: rgba(255,255,255,0.98);
+            border: 1px solid rgba(0,0,0,0.12);
+            border-radius: 18px;
+            box-shadow: 0 16px 30px rgba(0,0,0,0.12);
+            padding: 14px;
+            z-index: 1100;
+            margin-top: 10px;
+        }
+
+        .template-panel.hidden {
+            display: none;
+        }
+
+        .template-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .template-panel-header button {
+            border: none;
+            background: transparent;
+            font-size: 22px;
+            line-height: 1;
+            cursor: pointer;
+            color: var(--text-dark);
+            padding: 4px 8px;
+        }
+
+        .template-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .template-card {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+            padding: 12px;
+            border-radius: 16px;
+            border: 1px solid rgba(0,0,0,0.12);
+            background: #fafafa;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+            text-align: left;
+        }
+
+        .template-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+            border-color: rgba(38, 198, 218, 0.4);
+        }
+
+        .template-card strong {
+            font-size: 14px;
+        }
+
+        .template-card .preview {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .download-button {
+            border: none;
+            background: linear-gradient(135deg, #ff8fab, #26c6da);
+            color: white;
+            padding: 12px 10px;
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 12px;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+        }
+
+        .download-button:hover {
+            transform: translateY(-1px);
+        }
+
+        .editor-sidebar .tool-btn.small {
+            padding: 9px 10px;
+            font-size: 13px;
+        }
+
+        .selected-page {
+            outline: 4px solid rgba(38, 198, 218, 0.75);
+            box-shadow: 0 0 0 3px rgba(38, 198, 218, 0.12);
+        }
+
+        .page-menu {
+            position: absolute;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 10px;
+            background: rgba(255,255,255,0.98);
+            border: 1px solid rgba(0,0,0,0.12);
+            border-radius: 14px;
+            box-shadow: 0 14px 30px rgba(0,0,0,0.18);
+            min-width: 140px;
+            transition: opacity 0.2s ease;
+        }
+
+        .page-menu.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .page-menu button {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(0,0,0,0.12);
+            background: #fff;
+            color: #333;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .page-menu button.delete {
+            background: #ff8fab;
+            color: white;
+            border-color: transparent;
+        }
+
+        @media (max-width: 1100px) {
+            body {
+                padding: 50px 20px 50px 20px;
+            }
+
+            .offcanvas.editor-sidebar {
+                width: min(440px, 95vw);
+            }
+
+            .infographic-container {
+                padding: 50px 30px;
+                min-height: 3200px;
+            }
+
+            .template-panel {
+                left: 0;
+                right: 0;
+                width: auto;
+                max-width: none;
+            }
+        }
+
+        @media (max-width: 900px) {
+            body {
+                padding: 20px;
+            }
+
+            .offcanvas.editor-sidebar {
+                width: 100vw;
+                max-width: 100vw;
+                border-radius: 0 0 24px 24px;
+            }
+
+            .editor-sidebar .tool-group {
+                width: 100%;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .editor-sidebar .tool-btn,
+            .editor-sidebar select,
+            .editor-sidebar input[type="color"] {
+                width: 100%;
+            }
+
+            .infographic-container {
+                padding: 40px 20px;
+                min-height: 2800px;
+            }
+
+            .page-menu {
+                position: fixed;
+                top: 100px;
+                right: 10px;
+                left: auto;
+            }
+
+            .template-panel {
+                position: fixed;
+                top: calc(100% + 8px);
+                left: 10px;
+                right: 10px;
+                width: auto;
+                max-width: none;
+                margin: 0;
+            }
+        }
+
+        .text-box,
+        .text-box-highlight {
+            position: relative;
+            resize: both;
+            overflow: auto;
+            min-width: 240px;
+            min-height: 140px;
+            background: rgba(255,255,255,0.95);
+            border: 3px dashed var(--blue-main);
+            border-radius: 22px;
+            padding: 20px;
+            margin: 16px 0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+            cursor: text;
+            max-width: 100%;
+            min-width: 240px;
+        }
+
+        .drag-handle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 24px;
+            height: 24px;
+            border-radius: 8px;
+            background: rgba(0,0,0,0.12);
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s ease;
+        }
+
+        .drag-handle:hover {
+            background: rgba(0,0,0,0.2);
+        }
+
+        .drag-handle::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            background: #fff;
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.2);
+        }
+
+        .text-box-highlight {
+            background: linear-gradient(180deg, rgba(255,242,204,0.95), rgba(255,245,157,0.9));
+            border-color: var(--yellow-main);
+        }
+
+        .text-box-yellow {
+            background: #fff9c4;
+            border-color: #fdd835;
+        }
+
+        .text-box-bordered {
+            background: #ffffff;
+            border-color: #424242;
+        }
+
+        .text-box-pastel {
+            background: linear-gradient(180deg, #fce4ec, #e1f5fe);
+            border-color: #ab47bc;
+        }
+
+        .text-box-neon {
+            background: #212121;
+            color: #e1f5fe;
+            border-color: #69f0ae;
+        }
+
+        .text-box-note {
+            background: #fff8e1;
+            border-color: #ffb300;
+        }
+
+        .text-box-card {
+            background: #ffffff;
+            border-color: rgba(0,0,0,0.12);
+            box-shadow: 0 14px 30px rgba(0,0,0,0.08);
+        }
+
+        .text-box-vintage {
+            background: #f5e9d4;
+            border-color: #8d6e63;
+            color: #4e342e;
+        }
+
+        .text-box-minimal {
+            background: transparent;
+            border-color: transparent;
+            box-shadow: none;
+            padding: 16px;
+        }
+
+        .text-box-info {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+
+        .text-box h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 20px;
+            font-weight: 900;
+        }
+
+        .text-box p,
+        .text-box-highlight p {
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .text-box.dragging,
+        .text-box-highlight.dragging {
+            opacity: 0.85;
+        }
+    </style>
+</head>
+<body>
+    <button class="btn btn-primary offcanvas-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#toolsOffcanvas" aria-controls="toolsOffcanvas" title="Mostrar herramientas">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <div class="offcanvas offcanvas-start editor-sidebar" tabindex="-1" id="toolsOffcanvas" aria-labelledby="toolsOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="toolsOffcanvasLabel">Herramientas</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+        </div>
+        <div class="offcanvas-body p-0">
+            <div class="px-3 py-3" aria-label="Barra de herramientas de edición">
+                <button id="toggleEditBtn" class="tool-btn btn btn-outline-secondary w-100 active mb-3" type="button"><i class="bi bi-pencil-square me-2"></i>Editar</button>
+                <div class="accordion accordion-flush" id="toolbarAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFormat">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFormat" aria-expanded="false" aria-controls="collapseFormat">
+                                <i class="bi bi-type me-2"></i>Formato de texto
+                            </button>
+                        </h2>
+                        <div id="collapseFormat" class="accordion-collapse collapse" aria-labelledby="headingFormat" data-bs-parent="#toolbarAccordion">
+                            <div class="accordion-body px-0 py-2">
+                                <div class="d-grid gap-2 mb-3">
+                                    <button class="tool-btn btn btn-outline-secondary text-start" type="button" data-command="bold" title="Negrita"><i class="bi bi-type-bold me-2"></i>Negrita</button>
+                                    <button class="tool-btn btn btn-outline-secondary text-start" type="button" data-command="italic" title="Cursiva"><i class="bi bi-type-italic me-2"></i>Cursiva</button>
+                                    <button class="tool-btn btn btn-outline-secondary text-start" type="button" data-command="underline" title="Subrayado"><i class="bi bi-type-underline me-2"></i>Subrayado</button>
+                                    <button class="tool-btn btn btn-outline-secondary text-start" type="button" data-command="strikeThrough" title="Tachado"><i class="bi bi-type-strikethrough me-2"></i>Tachado</button>
+                                </div>
+                                <div class="btn-group w-100 mb-3" role="group" aria-label="Alineación de texto">
+                                    <button class="tool-btn btn btn-outline-secondary text-start" type="button" data-command="justifyLeft" title="Alinear izquierda"><i class="bi bi-text-left me-2"></i>Izquierda</button>
+                                    <button class="tool-btn btn btn-outline-secondary text-start" type="button" data-command="justifyCenter" title="Alinear centro"><i class="bi bi-text-center me-2"></i>Centro</button>
+                                    <button class="tool-btn btn btn-outline-secondary text-start" type="button" data-command="justifyRight" title="Alinear derecha"><i class="bi bi-text-right me-2"></i>Derecha</button>
+                                    <button class="tool-btn btn btn-outline-secondary text-start" type="button" data-command="justifyFull" title="Justificar"><i class="bi bi-align-center me-2"></i>Justificar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingStyle">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStyle" aria-expanded="false" aria-controls="collapseStyle">
+                                <i class="bi bi-palette me-2"></i>Estilo y fuente
+                            </button>
+                        </h2>
+                        <div id="collapseStyle" class="accordion-collapse collapse" aria-labelledby="headingStyle" data-bs-parent="#toolbarAccordion">
+                            <div class="accordion-body px-0 py-2">
+                                <div class="mb-3">
+                                    <label for="fontFamilySelect" class="form-label">Fuente</label>
+                                    <select id="fontFamilySelect" class="form-select" title="Tipo de letra">
+                                        <option value="Nunito, sans-serif">Nunito</option>
+                                        <option value="Caveat, cursive">Caveat</option>
+                                        <option value="Arial, sans-serif">Arial</option>
+                                        <option value="Georgia, serif">Georgia</option>
+                                        <option value="Courier New, monospace">Courier New</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="fontSizeSelect" class="form-label">Tamaño</label>
+                                    <select id="fontSizeSelect" class="form-select" title="Tamaño de fuente">
+                                        <option value="3">Pequeño</option>
+                                        <option value="4">Normal</option>
+                                        <option value="5">Grande</option>
+                                        <option value="6">Más grande</option>
+                                        <option value="7">Gigante</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="textColorPicker" class="form-label">Color texto</label>
+                                    <input type="color" id="textColorPicker" class="form-control form-control-color mb-2" title="Color de texto" value="#424242" />
+                                    <label for="highlightColorPicker" class="form-label">Resaltar</label>
+                                    <input type="color" id="highlightColorPicker" class="form-control form-control-color" title="Color de resaltado" value="#ccff90" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingInsert">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInsert" aria-expanded="false" aria-controls="collapseInsert">
+                                <i class="bi bi-plus-square me-2"></i>Insertar contenido
+                            </button>
+                        </h2>
+                        <div id="collapseInsert" class="accordion-collapse collapse" aria-labelledby="headingInsert" data-bs-parent="#toolbarAccordion">
+                            <div class="accordion-body px-0 py-2 d-grid gap-2">
+                                <button class="tool-btn btn btn-outline-secondary text-start" id="insertImageBtn" type="button"><i class="bi bi-image me-2"></i>Insertar imagen</button>
+                                <button class="tool-btn btn btn-outline-secondary text-start" id="insertVideoBtn" type="button"><i class="bi bi-camera-video me-2"></i>Insertar video</button>
+                                <button class="tool-btn btn btn-outline-secondary text-start" id="addNoteBtn" type="button"><i class="bi bi-stickies me-2"></i>Agregar nota</button>
+                                <button class="tool-btn btn btn-outline-secondary text-start" id="addTextBoxBtn" type="button"><i class="bi bi-file-text me-2"></i>Agregar texto</button>
+                                <button class="tool-btn btn btn-outline-secondary text-start" id="addTextBlockBtn" type="button"><i class="bi bi-layout-text-window-reverse me-2"></i>Bloque de texto</button>
+                                <button class="tool-btn btn btn-outline-secondary text-start" id="showTextTemplatesBtn" type="button"><i class="bi bi-layout-text-window me-2"></i>Cajas de texto</button>
+                                <button class="tool-btn btn btn-outline-secondary text-start" id="addHighlightedTextBoxBtn" type="button"><i class="bi bi-stars me-2"></i>Caja resaltada</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingPages">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                                <i class="bi bi-file-earmark-plus me-2"></i>Páginas</button>
+                        </h2>
+                        <div id="collapsePages" class="accordion-collapse collapse" aria-labelledby="headingPages" data-bs-parent="#toolbarAccordion">
+                            <div class="accordion-body px-0 py-2 d-grid gap-2">
+                                <button class="tool-btn btn btn-outline-secondary" id="stretchPageBtn" type="button"><i class="bi bi-arrows-angle-expand me-2"></i>Estirar hoja</button>
+                                <button class="tool-btn btn btn-outline-secondary" id="addPageBtn" type="button"><i class="bi bi-file-earmark-plus me-2"></i>Agregar página</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="textTemplatePanel" class="template-panel hidden" aria-label="Plantillas de cajas de texto">
+                    <div class="template-panel-header">
+                        <span>Plantillas de cajas</span>
+                        <button id="closeTemplatePanel" type="button" class="btn-close" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="template-grid">
+                        <button class="template-card" data-template="basic" type="button">
+                            <strong>Básica</strong>
+                            <span class="preview">Fondo blanco y bordes suaves.</span>
+                        </button>
+                        <button class="template-card" data-template="highlight" type="button">
+                            <strong>Resaltada</strong>
+                            <span class="preview">Fondo amarillo claro para ideas.</span>
+                        </button>
+                        <button class="template-card" data-template="bordered" type="button">
+                            <strong>Recuadro</strong>
+                            <span class="preview">Borde oscuro y contenido claro.</span>
+                        </button>
+                        <button class="template-card" data-template="pastel" type="button">
+                            <strong>Pastel</strong>
+                            <span class="preview">Colores suaves y estilo moderno.</span>
+                        </button>
+                        <button class="template-card" data-template="neon" type="button">
+                            <strong>Neón</strong>
+                            <span class="preview">Textos brillantes sobre fondo oscuro.</span>
+                        </button>
+                        <button class="template-card" data-template="notebox" type="button">
+                            <strong>Nota</strong>
+                            <span class="preview">Diseño estilo post-it.</span>
+                        </button>
+                        <button class="template-card" data-template="card" type="button">
+                            <strong>Tarjeta</strong>
+                            <span class="preview">Caja limpia con sombra suave.</span>
+                        </button>
+                        <button class="template-card" data-template="vintage" type="button">
+                            <strong>Vintage</strong>
+                            <span class="preview">Fondo crema y tipografía elegante.</span>
+                        </button>
+                        <button class="template-card" data-template="minimal" type="button">
+                            <strong>Mínima</strong>
+                            <span class="preview">Solo texto y espacio blanco.</span>
+                        </button>
+                        <button class="template-card" data-template="info" type="button">
+                            <strong>Info</strong>
+                            <span class="preview">Fondo suave con icono de información.</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 mt-3">
+                    <button id="saveChangesBtn" class="tool-btn btn btn-success w-100" type="button"><i class="bi bi-save me-2"></i>Guardar cambios</button>
+                    <button id="downloadPdfBtn" class="tool-btn btn btn-danger w-100" type="button"><i class="bi bi-file-earmark-pdf me-2"></i>Descargar PDF</button>
+                </div>
+                <input type="file" id="imageInput" accept="image/*" style="display:none" />
+                <input type="file" id="videoInput" accept="video/*" style="display:none" />
+            </div>
+        </div>
+    </div>
+
+    <div id="pageMenu" class="page-menu hidden">
+        <button id="deletePageBtn" class="delete" type="button">Eliminar página</button>
+    </div>
+
+    <div class="pages-wrapper">
+        <div class="infographic-container editing-mode" contenteditable="true">
+        
+        <!-- HEADER -->
+        <div class="title-wrapper">
+            <div class="tape tape-center"></div>
+            <!-- Clip SVG -->
+            <svg class="paperclip" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M30,70 L30,30 C30,15 50,15 50,30 L50,75 C50,95 80,95 80,75 L80,20" fill="none" stroke="#b0bec5" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <h1 class="main-title">Periodonto de <span>Inserción</span></h1>
+            <div class="subtitle">El sistema de anclaje de tus dientes 🦷</div>
+            <p style="margin-top: 15px; font-weight: 700;">Compuesto por 3 estructuras fundamentales que comparten el mismo origen embriológico (Saco o folículo dental).</p>
+        </div>
+
+        <!-- 1. CEMENTO RADICULAR -->
+        <div class="section-block" style="border: 3px solid var(--pink-light);">
+            <div class="tape tape-corner-tl"></div>
+            <h2 class="section-title"><span class="highlight-pink">1. Cemento Radicular</span></h2>
+            <p>Es un tejido conectivo <b>mineralizado</b> que cubre la dentina en su porción radicular. Su función es brindar anclaje a las fibras del ligamento periodontal a la raíz.</p>
+            
+            <div class="grid-2">
+                <div class="post-it" style="background: var(--pink-light);">
+                    <h3 style="color: var(--pink-main); margin-bottom: 10px;">📋 Propiedades Físicas</h3>
+                    <ul style="padding-left: 20px; line-height: 1.6; font-size: 16px;">
+                        <li><b>Color:</b> Blanco anacarado (más oscuro/opaco que el esmalte).</li>
+                        <li><b>Dureza:</b> Menor a la de la dentina y el esmalte.</li>
+                        <li><b>Radiopacidad:</b> Semejante a la del hueso compacto.</li>
+                        <li><b>Avascular y sin inervación propia.</b></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 style="color: var(--text-dark); margin-bottom: 10px;">🔬 Componentes y Tipos</h3>
+                    <ul class="notes-list">
+                        <li class="border-pink"><b>Cementoblastos:</b> Células activas formadoras de cemento. Se adosan a la superficie hacia el ligamento.</li>
+                        <li class="border-pink"><b>Cementocitos:</b> Cementoblastos inactivos que quedaron atrapados en la matriz mineralizada (en lagunas).</li>
+                        <li class="border-pink"><b>Primario (Acelular):</b> Se forma antes de erupcionar. Tercio cervical.</li>
+                        <li class="border-pink"><b>Secundario (Celular):</b> Se forma cuando el diente entra en oclusión. Tercio apical.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="font-caveat" style="text-align: right; margin-top: 10px;">*Nota: La hipercementosis es el depósito excesivo de cemento en la raíz.</div>
+        </div>
+
+
+        <!-- 2. LIGAMENTO PERIODONTAL -->
+        <div class="section-block" style="border: 3px solid var(--teal-light);">
+            <div class="tape tape-corner-tr"></div>
+            <!-- Clip SVG -->
+            <svg class="paperclip" style="left: auto; right: 30px; transform: rotate(15deg);" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M30,70 L30,30 C30,15 50,15 50,30 L50,75 C50,95 80,95 80,75 L80,20" fill="none" stroke="#ff8fab" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+
+            <h2 class="section-title"><span class="highlight-teal">2. Ligamento Periodontal</span></h2>
+            <p>Es una delgada capa de <b>tejido conectivo fibroso y NO mineralizado</b>. Mantiene al diente en su alvéolo actuando como un colchón hidráulico que soporta las fuerzas masticatorias.</p>
+
+            <h3 style="margin: 25px 0 15px; text-align: center; font-size: 24px;">Elementos Celulares del Ligamento</h3>
+            
+            <div class="grid-2">
+                <ul class="notes-list">
+                    <li class="border-teal">
+                        <b>🛠️ Formadoras:</b><br>
+                        - <i>Fibroblastos:</i> (Más abundantes) Forman colágeno.<br>
+                        - <i>Osteoblastos:</i> Forman hueso hacia la pared alveolar.<br>
+                        - <i>Cementoblastos:</i> Forman cemento hacia la raíz.
+                    </li>
+                    <li class="border-purple">
+                        <b>♻️ Resortivas:</b><br>
+                        - <i>Osteoclastos:</i> Reabsorben hueso.<br>
+                        - <i>Cementoclastos:</i> Reabsorben cemento.
+                    </li>
+                </ul>
+                <ul class="notes-list">
+                    <li class="border-yellow">
+                        <b>🛡️ Defensivas:</b><br>
+                        Macrófagos, mastocitos, neutrófilos, linfocitos y eosinófilos. Encargadas del sistema inmune.
+                    </li>
+                    <li class="border-blue">
+                        <b>🧬 Otras Células:</b><br>
+                        - <i>Restos de Malassez:</i> Restos de la vaina de Hertwig.<br>
+                        - <i>Células Madre:</i> Ectomesenquimáticas indiferenciadas con alto poder regenerativo.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+        <!-- 3. EL DIAGRAMA DE FIBRAS -->
+        <div class="diagram-section section-block">
+            <h2 class="section-title text-center" style="color: var(--teal-main); margin-bottom: 10px;">Grupos de Fibras Principales</h2>
+            <p class="text-center font-caveat" style="font-size: 28px;">Las fibras de colágeno se agrupan para resistir todo tipo de fuerzas</p>
+
+            <div class="diagram-container">
+                <!-- SVG DEL DIENTE -->
+                <svg class="tooth-svg" viewBox="0 0 500 750" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Hueso Alveolar (Textura) -->
+                    <path d="M 50,250 L 50,700 L 200,700 L 200,550 C 200,500 150,450 150,380 L 150,250 Z" fill="#ffcdd2" stroke="#ef9a9a" stroke-width="4"/>
+                    <path d="M 450,250 L 450,700 L 300,700 L 300,550 C 300,500 350,450 350,380 L 350,250 Z" fill="#ffcdd2" stroke="#ef9a9a" stroke-width="4"/>
+                    <!-- Tabique interradicular -->
+                    <path d="M 220,700 L 220,600 C 220,570 250,540 250,540 C 250,540 280,570 280,600 L 280,700 Z" fill="#ffcdd2" stroke="#ef9a9a" stroke-width="4"/>
+
+                    <!-- Espacio Ligamento Periodontal -->
+                    <path d="M 150,250 L 150,380 C 150,450 200,500 200,550 L 200,660 C 200,680 220,680 220,660 L 220,600 C 220,550 280,550 280,600 L 280,660 C 280,680 300,680 300,660 L 300,550 C 300,500 350,450 350,380 L 350,250 Z" fill="#e0f7fa" />
+
+                    <!-- Diente: Dentina y Cemento -->
+                    <path d="M 165,250 L 165,380 C 165,430 190,490 190,560 L 190,645 C 190,655 210,655 210,645 L 210,550 C 210,500 290,500 290,550 L 290,645 C 290,655 310,655 310,645 L 310,560 C 310,490 335,430 335,380 L 335,250 Z" fill="#fff9c4" stroke="#d7ccc8" stroke-width="5"/>
+                    
+                    <!-- Diente: Corona de Esmalte -->
+                    <path d="M 160,255 C 130,140 160,70 190,50 C 220,30 250,60 250,60 C 250,60 280,30 310,50 C 340,70 370,140 340,255 Z" fill="#ffffff" stroke="#cfd8dc" stroke-width="5"/>
+
+                    <!-- Cámara Pulpar -->
+                    <path d="M 210,180 C 210,140 220,110 250,110 C 280,110 290,140 290,180 L 280,350 C 270,420 270,480 270,590 L 260,590 L 260,450 C 250,450 250,450 240,450 L 240,590 L 230,590 L 230,450 C 230,420 230,350 220,350 Z" fill="#ff8fab" opacity="0.8"/>
+
+                    <!-- DIBUJO DE FIBRAS -->
+                    <g stroke-width="4" stroke-linecap="round">
+                        <!-- 1. Cresta Alveolar (Rosado) -->
+                        <path d="M 165,260 L 148,230 M 165,275 L 148,245 M 165,290 L 148,260" stroke="#ff8fab" />
+                        <path d="M 335,260 L 352,230 M 335,275 L 352,245 M 335,290 L 352,260" stroke="#ff8fab" />
+                        
+                        <!-- 2. Horizontales (Amarillo) -->
+                        <path d="M 165,330 L 150,330 M 165,345 L 150,345 M 165,360 L 150,360" stroke="#f6b93b" />
+                        <path d="M 335,330 L 350,330 M 335,345 L 350,345 M 335,360 L 350,360" stroke="#f6b93b" />
+                        
+                        <!-- 3. Oblicuas (Teal) -->
+                        <path d="M 175,420 L 155,445 M 178,440 L 158,465 M 181,460 L 161,485 M 184,480 L 164,505 M 187,500 L 167,525" stroke="#26c6da" />
+                        <path d="M 325,420 L 345,445 M 322,440 L 342,465 M 319,460 L 339,485 M 316,480 L 336,505 M 313,500 L 333,525" stroke="#26c6da" />
+                        
+                        <!-- 4. Apicales (Morado) -->
+                        <path d="M 190,645 L 175,670 M 200,650 L 200,685 M 210,645 L 225,670" stroke="#ab47bc" />
+                        <path d="M 290,645 L 275,670 M 300,650 L 300,685 M 310,645 L 325,670" stroke="#ab47bc" />
+                        
+                        <!-- 5. Interradiculares (Rojo) -->
+                        <path d="M 220,530 L 235,550 M 240,520 L 250,540 M 260,520 L 250,540 M 280,530 L 265,550" stroke="#e55039" />
+                    </g>
+                </svg>
+
+                <!-- Punteros Explicativos -->
+                <div class="pointer-box pb-1">
+                    1. Cresta Alveolar
+                    <span>Van del diente a la cresta ósea. <b>Evitan la extrusión</b> (salida) del diente.</span>
+                </div>
+
+                <div class="pointer-box pb-2">
+                    2. Grupo Horizontal
+                    <span>Van en ángulo recto al eje del diente. Resisten las <b>fuerzas laterales</b>.</span>
+                </div>
+
+                <div class="pointer-box pb-3">
+                    3. Grupo Oblicuo
+                    <span>Las más numerosas y potentes. Resisten la tensión vertical impidiendo la <b>intrusión</b> (hundimiento).</span>
+                </div>
+
+                <div class="pointer-box pb-4">
+                    4. Grupo Apical
+                    <span>Del ápice al fondo del alvéolo. <b>Amortiguan movimientos</b> de extrusión e intrusión.</span>
+                </div>
+
+                <div class="pointer-box pb-5">
+                    5. Interradicular
+                    <span>Solo en dientes con más de 1 raíz. En el tabique. Evita <b>lateralidad y rotación</b>.</span>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 4. HUESO ALVEOLAR -->
+        <div class="section-block" style="border: 3px solid var(--blue-light);">
+            <div class="tape tape-center" style="background-color: var(--blue-light); border-color: var(--blue-main);"></div>
+            <h2 class="section-title"><span class="highlight-blue">4. Hueso Alveolar</span></h2>
+            <p>Es la porción de los maxilares (superior e inferior) que rodea y contiene a los dientes. Las cavidades donde el diente se inserta se denominan <b>alvéolos dentales</b>.</p>
+
+            <div class="grid-2">
+                <div class="post-it" style="background: var(--blue-light); border-radius: 20px;">
+                    <h3 style="color: var(--blue-main); margin-bottom: 10px;">🦴 Láminas (Tablas Alveolares)</h3>
+                    <ul style="padding-left: 20px; line-height: 1.6; font-size: 16px;">
+                        <li><b>Compacta Periodóntica (Lámina Dura):</b> Es la cara del alvéolo que está en contacto directo con el Ligamento Periodontal.</li>
+                        <li><b>Compacta Perióstica:</b> Es la cara exterior del hueso en contacto con el periostio.</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 style="color: var(--text-dark); margin-bottom: 10px;">🧱 Tabiques Alveolares</h3>
+                    <ul class="notes-list">
+                        <li class="border-blue"><b>Interdentarios:</b> Es el tejido óseo esponjoso que separa el alvéolo de un diente del de su diente vecino.</li>
+                        <li class="border-blue"><b>Interradiculares:</b> Es el hueso que separa las raíces de un mismo diente multirradicular.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 5. FUNCIONES GENERALES -->
+        <div class="section-block" style="border: 3px solid var(--yellow-main); background: #fffde7;">
+            <h2 class="section-title text-center" style="width: 100%;"><span class="highlight-text">Funciones del Sistema Periodontal</span></h2>
+            
+            <div class="grid-2">
+                <div style="background: var(--paper); padding: 25px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <h3 style="color: var(--pink-main); font-size: 22px; margin-bottom: 10px;">🏋️ Física (Soporte)</h3>
+                    <p style="font-size: 16px;">Fija el diente en su alvéolo. Transmite y absorbe el impacto de las cargas oclusales excesivas hacia el hueso para evitar fracturas.</p>
+                </div>
+                
+                <div style="background: var(--paper); padding: 25px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <h3 style="color: var(--teal-main); font-size: 22px; margin-bottom: 10px;">🏗️ Formativa y Remodelación</h3>
+                    <p style="font-size: 16px;">Actúa como periostio. Sus células forman, mantienen y reparan constantemente el hueso alveolar y el cemento radicular.</p>
+                </div>
+
+                <div style="background: var(--paper); padding: 25px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <h3 style="color: var(--blue-main); font-size: 22px; margin-bottom: 10px;">🩸 Nutricional</h3>
+                    <p style="font-size: 16px;">Posee un rico aporte vascular (vasos apicales, del hueso y de la encía) que nutre al cemento, al hueso y al propio ligamento.</p>
+                </div>
+
+                <div style="background: var(--paper); padding: 25px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                    <h3 style="color: var(--purple-main); font-size: 22px; margin-bottom: 10px;">🧠 Sensitiva</h3>
+                    <p style="font-size: 16px;">Inervado por el Nervio Trigémino. Sus mecanorreceptores transmiten la sensación táctil, de presión y dolor, controlando la masticación.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER: INTEGRANTES -->
+        <div class="footer-section">
+            <h3>Créditos y Creadores 📝</h3>
+            <div class="integrantes-grid">
+                <div class="integrante-badge">Hassan Farhat</div>
+                <div class="integrante-badge">Samantha Zúñiga</div>
+                <div class="integrante-badge">María Colombo</div>
+                <div class="integrante-badge">Alejandra Gonzalez</div>
+                <div class="integrante-badge">Stephany Caraballo</div>
+                <div class="integrante-badge">Natasha Dushi</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Vmx7Cq0ZyEM6tn0oP0IuY6wLlF3LiknVIO3IXUW2+yp7JcGzGKPpoQqqc5mXyZ81" crossorigin="anonymous"></script>
+    <script>
+        const infographic = document.querySelector('.infographic-container');
+        const pagesWrapper = document.querySelector('.pages-wrapper');
+        let activePage = infographic;
+        const toggleEditBtn = document.getElementById('toggleEditBtn');
+        const textColorPicker = document.getElementById('textColorPicker');
+        const highlightColorPicker = document.getElementById('highlightColorPicker');
+        const fontSizeSelect = document.getElementById('fontSizeSelect');
+        const fontFamilySelect = document.getElementById('fontFamilySelect');
+        const addNoteBtn = document.getElementById('addNoteBtn');
+        const addTextBoxBtn = document.getElementById('addTextBoxBtn');
+        const addTextBlockBtn = document.getElementById('addTextBlockBtn');
+        const showTextTemplatesBtn = document.getElementById('showTextTemplatesBtn');
+        const addHighlightedTextBoxBtn = document.getElementById('addHighlightedTextBoxBtn');
+        const insertImageBtn = document.getElementById('insertImageBtn');
+        const textTemplatePanel = document.getElementById('textTemplatePanel');
+        const closeTemplatePanel = document.getElementById('closeTemplatePanel');
+        const insertVideoBtn = document.getElementById('insertVideoBtn');
+        const addPageBtn = document.getElementById('addPageBtn');
+        const stretchPageBtn = document.getElementById('stretchPageBtn');
+        const saveChangesBtn = document.getElementById('saveChangesBtn');
+        const deletePageBtn = document.getElementById('deletePageBtn');
+        const pageMenu = document.getElementById('pageMenu');
+        const imageInput = document.getElementById('imageInput');
+        const videoInput = document.getElementById('videoInput');
+
+        function setEditMode(enabled) {
+            document.querySelectorAll('.infographic-container').forEach(page => {
+                page.contentEditable = enabled;
+                page.classList.toggle('editing-mode', enabled);
+            });
+            toggleEditBtn.classList.toggle('active', enabled);
+            toggleEditBtn.textContent = enabled ? 'Editar' : 'Ver';
+        }
+
+        function setActivePage(page) {
+            if (activePage) {
+                activePage.classList.remove('selected-page');
+            }
+            activePage = page;
+            if (activePage) {
+                activePage.classList.add('selected-page');
+                updatePageMenu();
+                focusPage(activePage);
+            }
+        }
+
+        function focusPage(page) {
+            page.setAttribute('tabindex', '0');
+            page.focus();
+
+            const selection = window.getSelection();
+            if (!selection) return;
+            selection.removeAllRanges();
+
+            const focusTarget = page.querySelector(':scope > *:last-child') || page;
+            const range = document.createRange();
+            range.selectNodeContents(focusTarget);
+            range.collapse(false);
+            selection.addRange(range);
+        }
+
+        function updatePageMenu() {
+            if (!activePage) {
+                pageMenu.classList.add('hidden');
+                return;
+            }
+
+            const rect = activePage.getBoundingClientRect();
+            const top = window.scrollY + rect.top + 20;
+            const left = window.scrollX + rect.right + 10;
+            pageMenu.style.top = `${top}px`;
+            pageMenu.style.left = `${left}px`;
+            pageMenu.classList.remove('hidden');
+
+            const pageCount = pagesWrapper.querySelectorAll('.infographic-container').length;
+            deletePageBtn.disabled = pageCount <= 1;
+            deletePageBtn.textContent = pageCount <= 1 ? 'No se puede eliminar' : 'Eliminar página';
+        }
+
+        function removePage(page) {
+            const pages = pagesWrapper.querySelectorAll('.infographic-container');
+            if (pages.length <= 1) {
+                alert('Debe quedar al menos una página.');
+                return;
+            }
+
+            const nextPage = page.nextElementSibling || page.previousElementSibling;
+            page.remove();
+            pageMenu.classList.add('hidden');
+            if (nextPage) {
+                setActivePage(nextPage);
+            }
+        }
+
+        function exec(command, value = null) {
+            document.execCommand('styleWithCSS', false, true);
+            document.execCommand(command, false, value);
+            if (activePage) {
+                focusPage(activePage);
+            }
+        }
+
+        function getCurrentPage() {
+            return activePage || pagesWrapper.querySelector('.infographic-container');
+        }
+
+        let activeDrag = null;
+        let dragOffset = { x: 0, y: 0 };
+        let dragPlaceholder = null;
+        let currentMaxZ = 1000;
+
+        function createDraggableElement(element) {
+            if (element.dataset.draggableInit === 'true') return;
+            element.dataset.draggableInit = 'true';
+            element.classList.add('draggable-item');
+            element.style.touchAction = 'none';
+            if (getComputedStyle(element).position === 'static') {
+                element.style.position = 'relative';
+            }
+
+            let dragHandle = element.querySelector('.drag-handle');
+            if (!dragHandle) {
+                dragHandle = document.createElement('div');
+                dragHandle.className = 'drag-handle';
+                dragHandle.style.position = 'absolute';
+                dragHandle.style.top = '10px';
+                dragHandle.style.right = '10px';
+                dragHandle.style.width = '24px';
+                dragHandle.style.height = '24px';
+                dragHandle.style.borderRadius = '6px';
+                dragHandle.style.background = 'rgba(0,0,0,0.08)';
+                dragHandle.style.cursor = 'grab';
+                dragHandle.style.zIndex = '10';
+                dragHandle.title = 'Arrastrar';
+                element.appendChild(dragHandle);
+            }
+
+            if (!dragHandle.dataset.dragInit) {
+                dragHandle.dataset.dragInit = 'true';
+                dragHandle.addEventListener('mousedown', startPointerDrag);
+                dragHandle.addEventListener('touchstart', startPointerDrag, { passive: false });
+            }
+
+            if (!element.dataset.pageSelectInit) {
+                element.dataset.pageSelectInit = 'true';
+                element.addEventListener('click', (event) => {
+                    const page = element.closest('.infographic-container');
+                    if (page) setActivePage(page);
+                    event.stopPropagation();
+                });
+            }
+        }
+
+
+        function startPointerDrag(event) {
+            if (event.target.closest('.editor-sidebar')) return;
+            event.preventDefault();
+
+            const handle = event.currentTarget;
+            const element = handle.classList.contains('drag-handle') ? handle.closest('.draggable-item') : handle;
+            if (!element) return;
+
+            const rect = element.getBoundingClientRect();
+            const pageContainer = element.closest('.infographic-container') || infographic;
+            const containerRect = pageContainer.getBoundingClientRect();
+            const clientX = event.type === 'touchstart' ? event.touches[0].clientX : event.clientX;
+            const clientY = event.type === 'touchstart' ? event.touches[0].clientY : event.clientY;
+
+            dragOffset.x = clientX - rect.left;
+            dragOffset.y = clientY - rect.top;
+            activeDrag = element;
+            element.classList.add('dragging');
+            element.style.zIndex = ++currentMaxZ;
+
+            dragPlaceholder = document.createElement('div');
+            dragPlaceholder.className = 'placeholder';
+            dragPlaceholder.style.width = `${rect.width}px`;
+            dragPlaceholder.style.height = `${rect.height}px`;
+            element.parentNode.insertBefore(dragPlaceholder, element);
+
+            element.style.position = 'absolute';
+            element.style.width = `${rect.width}px`;
+            element.style.height = `${rect.height}px`;
+            element.style.left = `${rect.left - containerRect.left}px`;
+            element.style.top = `${rect.top - containerRect.top}px`;
+            pageContainer.appendChild(element);
+
+            window.addEventListener('mousemove', movePointerDrag);
+            window.addEventListener('touchmove', movePointerDrag, { passive: false });
+            window.addEventListener('mouseup', endPointerDrag);
+            window.addEventListener('touchend', endPointerDrag);
+        }
+
+        function movePointerDrag(event) {
+            if (!activeDrag) return;
+            event.preventDefault();
+            const clientX = event.type === 'touchmove' ? event.touches[0].clientX : event.clientX;
+            const clientY = event.type === 'touchmove' ? event.touches[0].clientY : event.clientY;
+            const pageContainer = activeDrag.closest('.infographic-container') || infographic;
+            const containerRect = pageContainer.getBoundingClientRect();
+            activeDrag.style.left = `${clientX - containerRect.left - dragOffset.x}px`;
+            activeDrag.style.top = `${clientY - containerRect.top - dragOffset.y}px`;
+        }
+
+        function endPointerDrag(event) {
+            if (!activeDrag) return;
+            event.preventDefault();
+
+            const clientX = event.type === 'touchend' && event.changedTouches ? event.changedTouches[0].clientX : event.clientX;
+            const clientY = event.type === 'touchend' && event.changedTouches ? event.changedTouches[0].clientY : event.clientY;
+            const target = document.elementFromPoint(clientX, clientY);
+            if (target && target !== activeDrag && target.closest('.draggable-item') && !target.closest('.editor-sidebar')) {
+                activeDrag.style.zIndex = Number(target.closest('.draggable-item').style.zIndex || 1000) + 1;
+            }
+
+            if (dragPlaceholder && dragPlaceholder.parentNode) {
+                dragPlaceholder.parentNode.removeChild(dragPlaceholder);
+                dragPlaceholder = null;
+            }
+
+            activeDrag.classList.remove('dragging');
+            activeDrag = null;
+            window.removeEventListener('mousemove', movePointerDrag);
+            window.removeEventListener('touchmove', movePointerDrag);
+            window.removeEventListener('mouseup', endPointerDrag);
+            window.removeEventListener('touchend', endPointerDrag);
+        }
+
+        function initDragAndDrop() {
+            document.querySelectorAll('.section-block, .pointer-box, .title-wrapper, .footer-section, img, video, .text-box, .text-box-highlight, .draggable-item').forEach(el => {
+                createDraggableElement(el);
+            });
+        }
+
+        function addNote() {
+            const page = getCurrentPage();
+            const note = document.createElement('div');
+            note.className = 'post-it section-block';
+            note.setAttribute('contenteditable', 'true');
+            note.style.background = 'var(--yellow-light)';
+            note.style.maxWidth = '260px';
+            note.style.margin = '20px 0';
+            note.innerHTML = '<h3 style="margin-bottom: 10px; color: var(--yellow-main);">📝 Nota</h3><p>Escribe aquí tu nota...</p>';
+            page.appendChild(note);
+            createDraggableElement(note);
+        }
+
+        function addTextBox() {
+            const page = getCurrentPage();
+            const box = document.createElement('div');
+            box.className = 'text-box';
+            box.setAttribute('contenteditable', 'true');
+            box.innerHTML = '<h3>Caja de texto</h3><p>Escribe aquí tu contenido libre y arrástralo con el mouse.</p>';
+            page.appendChild(box);
+            createDraggableElement(box);
+        }
+
+        function addTextBlock() {
+            const page = getCurrentPage();
+            const box = document.createElement('div');
+            box.className = 'text-box';
+            box.setAttribute('contenteditable', 'true');
+            box.style.width = '320px';
+            box.style.minHeight = '180px';
+            box.innerHTML = '<h3>Texto libre</h3><p>Personaliza esta caja y ajusta su tamaño desde la esquina inferior derecha.</p>';
+            page.appendChild(box);
+            createDraggableElement(box);
+        }
+
+        function addHighlightedTextBox() {
+            const page = getCurrentPage();
+            const box = document.createElement('div');
+            box.className = 'text-box-highlight';
+            box.setAttribute('contenteditable', 'true');
+            box.style.width = '360px';
+            box.style.minHeight = '200px';
+            box.innerHTML = '<h3>Caja resaltada</h3><p>Usa esta caja para destacar ideas importantes.</p>';
+            page.appendChild(box);
+            createDraggableElement(box);
+        }
+
+        function toggleTextTemplatePanel() {
+            textTemplatePanel.classList.toggle('hidden');
+        }
+
+        function hideTextTemplatePanel() {
+            textTemplatePanel.classList.add('hidden');
+        }
+
+        const textTemplates = {
+            basic: {
+                className: 'text-box',
+                html: '<h3>Texto básico</h3><p>Inserta un bloque simple con fondo blanco y bordes suaves.</p>'
+            },
+            highlight: {
+                className: 'text-box-yellow',
+                html: '<h3>Texto resaltado</h3><p>Perfecto para resumir ideas o llamar atención.</p>'
+            },
+            bordered: {
+                className: 'text-box-bordered',
+                html: '<h3>Recuadro</h3><p>Diseño más formal con borde oscuro.</p>'
+            },
+            pastel: {
+                className: 'text-box-pastel',
+                html: '<h3>Pastel</h3><p>Un tono suave para presentaciones creativas.</p>'
+            },
+            neon: {
+                className: 'text-box-neon',
+                html: '<h3>Neón</h3><p>Ideal para destacar un mensaje con contraste fuerte.</p>'
+            },
+            notebox: {
+                className: 'text-box-note',
+                html: '<h3>Nota</h3><p>Diseño estilo post-it para comentarios rápidos.</p>'
+            },
+            card: {
+                className: 'text-box-card',
+                html: '<h3>Tarjeta</h3><p>Un estilo limpio y corporativo para resúmenes.</p>'
+            },
+            vintage: {
+                className: 'text-box-vintage',
+                html: '<h3>Vintage</h3><p>Aspecto clásico con tonos retro.</p>'
+            },
+            minimal: {
+                className: 'text-box-minimal',
+                html: '<h3>Mínima</h3><p>Simple, limpia y moderna.</p>'
+            },
+            info: {
+                className: 'text-box-info',
+                html: '<h3>Info</h3><p>Ideal para datos importantes y aclaraciones.</p>'
+            }
+        };
+
+        function insertTextTemplate(templateName) {
+            const template = textTemplates[templateName];
+            if (!template) return;
+            const page = getCurrentPage();
+            const box = document.createElement('div');
+            box.className = 'text-box';
+            if (template.className) box.classList.add(template.className);
+            box.setAttribute('contenteditable', 'true');
+            box.style.width = '320px';
+            box.style.minHeight = '180px';
+            box.innerHTML = template.html;
+            page.appendChild(box);
+            createDraggableElement(box);
+            setActivePage(page);
+            hideTextTemplatePanel();
+        }
+
+        function insertMedia(type, file) {
+            const page = getCurrentPage();
+            const reader = new FileReader();
+            reader.onload = () => {
+                let element;
+                if (type === 'image') {
+                    element = document.createElement('img');
+                    element.src = reader.result;
+                    element.style.maxWidth = '100%';
+                    element.style.borderRadius = '18px';
+                    element.style.display = 'block';
+                    element.style.margin = '20px auto';
+                } else {
+                    element = document.createElement('video');
+                    element.src = reader.result;
+                    element.controls = true;
+                    element.style.maxWidth = '100%';
+                    element.style.borderRadius = '18px';
+                    element.style.display = 'block';
+                    element.style.margin = '20px auto';
+                }
+                page.appendChild(element);
+                createDraggableElement(element);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function addPage() {
+            const page = document.createElement('div');
+            page.className = 'infographic-container editing-mode';
+            page.setAttribute('contenteditable', 'true');
+            page.style.minHeight = '1500px';
+            page.style.marginTop = '40px';
+            page.style.padding = '60px 50px';
+            page.innerHTML = `
+                <div class="title-wrapper" style="border: 3px dashed var(--pink-main);">
+                    <div class="tape tape-center"></div>
+                    <h1 class="main-title">Página nueva</h1>
+                    <div class="subtitle">Continúa aquí</div>
+                    <p style="margin-top: 15px; font-weight: 700;">Arrastra elementos o escribe directamente.</p>
+                </div>
+            `;
+            pagesWrapper.appendChild(page);
+            page.setAttribute('tabindex', '0');
+            setActivePage(page);
+            page.addEventListener('pointerdown', () => setActivePage(page));
+            page.addEventListener('click', () => setActivePage(page));
+            page.scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => focusPage(page), 0);
+        }
+
+        function stretchPage() {
+            const page = getCurrentPage();
+            const current = parseInt(page.style.minHeight) || page.getBoundingClientRect().height;
+            page.style.minHeight = `${current + 1200}px`;
+            page.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+
+        function saveChanges() {
+            pagesWrapper.querySelectorAll('.page-controls').forEach(control => control.remove());
+            const html = pagesWrapper.innerHTML;
+            localStorage.setItem('stephanyDocument', html);
+            alert('Cambios guardados localmente.');
+        }
+
+        function loadSavedChanges() {
+            const saved = localStorage.getItem('stephanyDocument');
+            if (!saved) return;
+            pagesWrapper.innerHTML = saved;
+            pagesWrapper.querySelectorAll('.page-controls').forEach(control => control.remove());
+            const pages = pagesWrapper.querySelectorAll('.infographic-container');
+            pages.forEach(page => {
+                page.setAttribute('contenteditable', 'true');
+                page.classList.add('editing-mode');
+                page.setAttribute('tabindex', '0');
+                page.addEventListener('pointerdown', () => setActivePage(page));
+                page.addEventListener('click', () => setActivePage(page));
+            });
+            initDragAndDrop();
+            const firstPage = pagesWrapper.querySelector('.infographic-container');
+            if (firstPage) setActivePage(firstPage);
+        }
+
+        function downloadPDF() {
+            const opt = {
+                margin: 10,
+                filename: 'Infografia_Periodonto_Insercion.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            return html2pdf().set(opt).from(pagesWrapper).save();
+        }
+
+        toggleEditBtn.addEventListener('click', () => {
+            setEditMode(!infographic.isContentEditable);
+        });
+
+        document.querySelectorAll('.tool-btn[data-command]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                exec(btn.dataset.command);
+            });
+        });
+
+        fontFamilySelect.addEventListener('change', () => exec('fontName', fontFamilySelect.value));
+        fontSizeSelect.addEventListener('change', () => exec('fontSize', fontSizeSelect.value));
+        textColorPicker.addEventListener('input', () => exec('foreColor', textColorPicker.value));
+        highlightColorPicker.addEventListener('input', () => exec('hiliteColor', highlightColorPicker.value));
+
+        addNoteBtn.addEventListener('click', addNote);
+        addTextBoxBtn.addEventListener('click', addTextBox);
+        addTextBlockBtn.addEventListener('click', addTextBlock);
+        showTextTemplatesBtn.addEventListener('click', toggleTextTemplatePanel);
+        addHighlightedTextBoxBtn.addEventListener('click', addHighlightedTextBox);
+        insertImageBtn.addEventListener('click', () => imageInput.click());
+        closeTemplatePanel.addEventListener('click', hideTextTemplatePanel);
+        document.querySelectorAll('.template-card').forEach(card => {
+            card.addEventListener('click', () => insertTextTemplate(card.dataset.template));
+        });
+        insertVideoBtn.addEventListener('click', () => videoInput.click());
+        addPageBtn.addEventListener('click', addPage);
+        stretchPageBtn.addEventListener('click', stretchPage);
+        document.getElementById('saveChangesBtn').addEventListener('click', saveChanges);
+        deletePageBtn.addEventListener('click', () => removePage(activePage));
+
+        imageInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) insertMedia('image', file);
+            imageInput.value = '';
+        });
+
+        videoInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) insertMedia('video', file);
+            videoInput.value = '';
+        });
+
+        document.getElementById('downloadPdfBtn').addEventListener('click', async () => {
+            if (typeof html2pdf === 'undefined') {
+                const script = document.createElement('script');
+                script.id = 'html2pdfScript';
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js';
+                script.onload = () => downloadPDF();
+                document.body.appendChild(script);
+            } else {
+                await downloadPDF();
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSavedChanges();
+            setEditMode(true);
+            initDragAndDrop();
+            const firstPage = pagesWrapper.querySelector('.infographic-container');
+            if (firstPage) setActivePage(firstPage);
+            window.addEventListener('resize', updatePageMenu);
+            window.addEventListener('scroll', updatePageMenu);
+        });
+    </script>
+</body>
+</html>
